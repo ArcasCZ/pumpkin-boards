@@ -3,7 +3,7 @@ import random
 from typing import Union, Dict
 
 import discord
-from discord.ext import commands, tasks
+from discord.ext import commands, tasks, check
 
 import database.config
 from core import utils, i18n, TranslationContext
