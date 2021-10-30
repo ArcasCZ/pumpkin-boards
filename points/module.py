@@ -3,10 +3,10 @@ import random
 from typing import Union, Dict
 
 import discord
-from discord.ext import commands, tasks, check
+from discord.ext import commands, tasks
 
 import database.config
-from core import utils, i18n, TranslationContext
+from core import utils, i18n, TranslationContext, check
 
 from .database import UserStats, BoardOrder
 
