@@ -97,8 +97,6 @@ class Points(commands.Cog):
                 ),
                 inline=False,
             )
-            
-        embed.set_footer(text="BEST 10")
 
         message = await ctx.send(embed=embed)
         await message.add_reaction("⏪")
@@ -136,8 +134,6 @@ class Points(commands.Cog):
                 ),
                 inline=False,
             )
-            
-        embed.set_footer(text="WORST 10")
 
         message = await ctx.send(embed=embed)
         await message.add_reaction("⏪")
@@ -201,13 +197,18 @@ class Points(commands.Cog):
             return
 
         embed = reaction.message.embeds[0]
-        
-        footer_data = embed.footer.text.split(" ")
+
         # get ordering
-        
-        order = BoardOrder.ASC if footer_data[0] == "WORST" else BoardOrder.DESC
-        
-        offset = int(footer_data[1]) - 10
+        if embed.title.endswith(_(ctx, "Points 💩")):
+            order = BoardOrder.ASC
+        else:
+            order = BoardOrder.DESC
+
+        # get current offset
+        if ", " in embed.fields[0].name:
+            offset = int(embed.fields[0].name.split(" ")[-1]) - 1
+        else:
+            offset = 0
 
         # get new offset
         if str(reaction) == "⏪":
@@ -235,11 +236,8 @@ class Points(commands.Cog):
 
         if offset:
             name += _(ctx, ", position {offset}").format(offset=offset + 1)
-            
 
         embed.clear_fields()
-        
-        embed.set_footer(footer_data[0] + " " + str(offset))
         embed.add_field(name=name, value=value, inline=False)
 
         # if the user is not present, add them to second field
