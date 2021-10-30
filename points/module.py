@@ -41,7 +41,6 @@ class Points(commands.Cog):
         await utils.Discord.send_help(ctx)
 
     @points.command(name="get")
-    @commands.check(check.spamchannel)
     async def points_get(self, ctx, member: discord.Member = None):
         """Get user points"""
         if member is None:
@@ -70,7 +69,6 @@ class Points(commands.Cog):
         await utils.Discord.delete_message(ctx.message)
 
     @points.command(name="leaderboard", aliases=["best"])
-    @commands.check(check.spamchannel)
     async def points_leaderboard(self, ctx):
         """Points leaderboard"""
         embed = utils.Discord.create_embed(
@@ -108,7 +106,6 @@ class Points(commands.Cog):
         await utils.Discord.delete_message(ctx.message)
 
     @points.command(name="loserboard", aliases=["worst"])
-    @commands.check(check.spamchannel)
     async def points_loserboard(self, ctx):
         """Points loserboard"""
         embed = utils.Discord.create_embed(
