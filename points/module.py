@@ -220,7 +220,7 @@ class Points(commands.Cog):
         if offset < 0:
             return await utils.Discord.remove_reaction(reaction.message, reaction, user)
 
-        users = UserStats.get_best(guild_id, BoardOrder.ASC, limit=10, offset=0)
+        users = UserStats.get_best(guild_id, order, limit=10, offset=0)
         value = Points._get_board(reaction.message.guild, user, users)
         if not value:
             # offset too big
