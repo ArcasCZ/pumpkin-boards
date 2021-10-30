@@ -239,7 +239,7 @@ class Points(commands.Cog):
 
         embed.clear_fields()
         
-        embed.set_footer(text=footer_data[0] + " " + str(offset + 10))
+        embed.set_footer(text=footer_data[0] + " " + str(offset))
         embed.add_field(name=name, value=value, inline=False)
 
         # if the user is not present, add them to second field
