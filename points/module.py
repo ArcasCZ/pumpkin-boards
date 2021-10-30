@@ -69,7 +69,7 @@ class Points(commands.Cog):
         await ctx.send(embed=embed)
         await utils.Discord.delete_message(ctx.message)
 
-    @points.command(name="leaderboard", aliast=["best"])
+    @points.command(name="leaderboard", aliases=["best"])
     @commands.check(check.spamchannel)
     async def points_leaderboard(self, ctx):
         """Points leaderboard"""
@@ -107,7 +107,7 @@ class Points(commands.Cog):
         await message.add_reaction("▶")
         await utils.Discord.delete_message(ctx.message)
 
-    @points.command(name="loserboard", alias=["worst"])
+    @points.command(name="loserboard", aliases=["worst"])
     @commands.check(check.spamchannel)
     async def points_loserboard(self, ctx):
         """Points loserboard"""
