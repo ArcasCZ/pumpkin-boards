@@ -387,7 +387,7 @@ class Karma(commands.Cog):
             if not found_emoji:
                 await ctx.reply(_(ctx, "Emoji {emoji} not found!").format(emoji=emoji))
                 return
-            DiscordEmoji.remove(ctx.guild.id, found_emoji.id, value)
+            DiscordEmoji.remove(ctx.guild.id, found_emoji.id)
             emoji_name = found_emoji.name
         else:
             UnicodeEmoji.remove(ctx.guild.id, emoji)
