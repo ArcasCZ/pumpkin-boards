@@ -760,7 +760,7 @@ class Karma(commands.Cog):
         # large guilds
         return ("large", 180, 15)
 
-    def _try_emoji_parse(emoji: str) -> Optional[discord.Emoji]:
+    def _try_emoji_parse(self, emoji: str) -> Optional[discord.Emoji]:
         try:
             emoji_id = int(str)
         except:
