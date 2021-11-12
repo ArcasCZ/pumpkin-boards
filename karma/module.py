@@ -235,7 +235,7 @@ class Karma(commands.Cog):
                 if type(emoji) == UnicodeEmoji:
                     emoji_str = emoji.emoji
                 elif type(emoji) == DiscordEmoji:
-                    emoji_str = self.bot.get_emoji(emoji.emoji_id)
+                    emoji_str = str(self.bot.get_emoji(emoji.emoji_id))
 
                 emoji_lists.append(emoji_str)
 
