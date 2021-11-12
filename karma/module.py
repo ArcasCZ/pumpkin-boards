@@ -762,6 +762,7 @@ class Karma(commands.Cog):
         try:
             emoji_id = int(emoji)
         except:
+            print("Error!")
             return None
 
         emoji = self.bot.get_emoji(emoji_id)
