@@ -1,5 +1,6 @@
 import asyncio
 import math
+import re
 from typing import Optional, List, Tuple, Union
 
 from emoji import UNICODE_EMOJI as _UNICODE_EMOJI
@@ -26,6 +27,8 @@ del _UNICODE_EMOJI
 _ = i18n.Translator("modules/boards").translate
 bot_log = logger.Bot.logger()
 guild_log = logger.Guild.logger()
+
+EMOJI_REGEX = "^:[a-zA-Z0-9]+:$"
 
 
 class Karma(commands.Cog):
@@ -183,6 +186,15 @@ class Karma(commands.Cog):
         if type(emoji) is discord.PartialEmoji:
             karma_emoji = DiscordEmoji.get(ctx.guild.id, emoji.id)
             emoji_url = emoji.url
+        elif re.match(EMOJI_REGEX, emoji):
+            found_emoji = discord.utils.get(guild.emojis, name=emoji.replace(":", ""))
+            if not found_emoji:
+                await ctx.reply(_(ctx, "Emoji {emoji} not found!").format(emoji=emoji))
+                return
+
+            karma_emoji = DiscordEmoji.get(ctx.guild.id, emoji.id)
+            emoji_url = emoji.url
+
         else:
             karma_emoji = UnicodeEmoji.get(ctx.guild.id, emoji)
             emoji_url = discord.Embed.Empty
@@ -270,16 +282,12 @@ class Karma(commands.Cog):
             )
             return
 
-        if type(emoji) == str and emoji.isdigit():
-            parsed_emoji = self._try_emoji_parse(emoji)
-
-            if parsed_emoji is None:
-                await ctx.reply(
-                    _(ctx, "Emoji with ID {emoji_id} not found!").format(emoji_id=emoji)
-                )
+        if type(emoji) == str and re.match(EMOJI_REGEX, emoji):
+            found_emoji = discord.utils.get(guild.emojis, name=emoji.replace(":", ""))
+            if not found_emoji:
+                await ctx.reply(_(ctx, "Emoji {emoji} not found!").format(emoji=emoji))
                 return
-
-            emoji = parsed_emoji
+            emoji = found_emoji
 
         emoji_name: str = getattr(emoji, "name", str(emoji))
 
@@ -371,17 +379,13 @@ class Karma(commands.Cog):
         if type(emoji) is discord.PartialEmoji:
             DiscordEmoji.add(ctx.guild.id, emoji.id, value)
             emoji_name = emoji.name
-        elif emoji.isdigit():
-            parsed_emoji = self._try_emoji_parse(emoji)
-
-            if parsed_emoji is None:
-                await ctx.reply(
-                    _(ctx, "Emoji with ID {emoji_id} not found!").format(emoji_id=emoji)
-                )
+        elif re.match(EMOJI_REGEX, emoji):
+            found_emoji = discord.utils.get(guild.emojis, name=emoji.replace(":", ""))
+            if not found_emoji:
+                await ctx.reply(_(ctx, "Emoji {emoji} not found!").format(emoji=emoji))
                 return
-
-            DiscordEmoji.add(ctx.guild.id, parsed_emoji.id, value)
-            emoji_name = parsed_emoji.name
+            DiscordEmoji.add(ctx.guild.id, found_emoji.id, value)
+            emoji_name = found_emoji.name
         else:
             UnicodeEmoji.add(ctx.guild.id, emoji, value)
             emoji_name = emoji
@@ -757,17 +761,6 @@ class Karma(commands.Cog):
 
         # large guilds
         return ("large", 180, 15)
-
-    def _try_emoji_parse(self, emoji: str) -> Optional[discord.Emoji]:
-        try:
-            emoji_id = int(emoji)
-        except:
-            print("Error!")
-            return None
-
-        emoji = self.bot.get_emoji(emoji_id)
-
-        return emoji
 
 
 def setup(bot) -> None:
