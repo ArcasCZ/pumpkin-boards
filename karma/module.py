@@ -371,6 +371,31 @@ class Karma(commands.Cog):
                 emoji=str(emoji), value=result
             )
         )
+    @commands.check(check.acl)
+    @karma_.command(name="unset")
+    async def karma_unset(self, ctx, emoji: Union[discord.PartialEmoji, str]):
+        """Set emoji's karma value."""
+        emoji_name: str
+        if type(emoji) is discord.PartialEmoji:
+            DiscordEmoji.remove(ctx.guild.id, emoji.id)
+            emoji_name = emoji.name
+        elif re.match(EMOJI_REGEX, emoji):
+            found_emoji = discord.utils.get(
+                ctx.guild.emojis, name=emoji.replace(":", "")
+            )
+            if not found_emoji:
+                await ctx.reply(_(ctx, "Emoji {emoji} not found!").format(emoji=emoji))
+                return
+            DiscordEmoji.remove(ctx.guild.id, found_emoji.id, value)
+            emoji_name = found_emoji.name
+        else:
+            UnicodeEmoji.remove(ctx.guild.id, emoji)
+            emoji_name = emoji
+
+        await guild_log.info(
+            ctx.author, ctx.channel, f"Karma value of '{emoji_name}' unset."
+        )
+        await ctx.reply(_(ctx, "The value has been unset."))
 
     @commands.check(check.acl)
     @karma_.command(name="set")
@@ -400,6 +425,8 @@ class Karma(commands.Cog):
             ctx.author, ctx.channel, f"Karma value of '{emoji_name}' set to {value}."
         )
         await ctx.reply(_(ctx, "The value has been set."))
+
+
 
     @commands.check(check.acl)
     @karma_.command(name="message")
