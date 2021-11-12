@@ -359,6 +359,20 @@ class Karma(commands.Cog):
         if type(emoji) is discord.PartialEmoji:
             DiscordEmoji.add(ctx.guild.id, emoji.id, value)
             emoji_name = emoji.name
+        elif emoji.isdigit():
+            emoji = self._try_emoji_parse(emoji)
+
+            if emoji is None:
+                await ctx.reply(
+                    _(ctx, "Emoji with ID {emoji_id} not found!").format(
+                        emoji_id=emoji_id
+                    )
+                )
+                return
+
+            DiscordEmoji.add(ctx.guild.id, emoji.id, value)
+            emoji_name = emoji.name
+
         else:
             UnicodeEmoji.add(ctx.guild.id, emoji, value)
             emoji_name = emoji
@@ -734,6 +748,16 @@ class Karma(commands.Cog):
 
         # large guilds
         return ("large", 180, 15)
+
+    def _try_emoji_parse(emoji: str) -> Optional[Emoji]:
+        try:
+            emoji_id = int(str)
+        except:
+            return None
+
+        emoji = self.bot.get_emoji(emoji_id)
+
+        return emoji
 
 
 def setup(bot) -> None:
