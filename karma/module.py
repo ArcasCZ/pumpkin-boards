@@ -187,7 +187,7 @@ class Karma(commands.Cog):
             karma_emoji = DiscordEmoji.get(ctx.guild.id, emoji.id)
             emoji_url = emoji.url
         elif re.match(EMOJI_REGEX, emoji):
-            found_emoji = discord.utils.get(guild.emojis, name=emoji.replace(":", ""))
+            found_emoji = discord.utils.get(ctx.guild.emojis, name=emoji.replace(":", ""))
             if not found_emoji:
                 await ctx.reply(_(ctx, "Emoji {emoji} not found!").format(emoji=emoji))
                 return
@@ -283,7 +283,7 @@ class Karma(commands.Cog):
             return
 
         if type(emoji) == str and re.match(EMOJI_REGEX, emoji):
-            found_emoji = discord.utils.get(guild.emojis, name=emoji.replace(":", ""))
+            found_emoji = discord.utils.get(ctx.guild.emojis, name=emoji.replace(":", ""))
             if not found_emoji:
                 await ctx.reply(_(ctx, "Emoji {emoji} not found!").format(emoji=emoji))
                 return
@@ -380,7 +380,7 @@ class Karma(commands.Cog):
             DiscordEmoji.add(ctx.guild.id, emoji.id, value)
             emoji_name = emoji.name
         elif re.match(EMOJI_REGEX, emoji):
-            found_emoji = discord.utils.get(guild.emojis, name=emoji.replace(":", ""))
+            found_emoji = discord.utils.get(ctx.guild.emojis, name=emoji.replace(":", ""))
             if not found_emoji:
                 await ctx.reply(_(ctx, "Emoji {emoji} not found!").format(emoji=emoji))
                 return
