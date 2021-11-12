@@ -760,7 +760,7 @@ class Karma(commands.Cog):
 
     def _try_emoji_parse(self, emoji: str) -> Optional[discord.Emoji]:
         try:
-            emoji_id = int(str)
+            emoji_id = int(emoji)
         except:
             return None
 
