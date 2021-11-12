@@ -271,16 +271,16 @@ class Karma(commands.Cog):
             return
 
         if type(emoji) == str and emoji.isdigit():
-            emoji = self._try_emoji_parse(emoji)
+            parsed_emoji = self._try_emoji_parse(emoji)
 
-            if emoji is None:
+            if parsed_emoji is None:
                 await ctx.reply(
-                    _(ctx, "Emoji with ID {emoji_id} not found!").format(
-                        emoji_id=emoji_id
-                    )
+                    _(ctx, "Emoji with ID {emoji_id} not found!").format(emoji_id=emoji)
                 )
-                return           
-            
+                return
+
+            emoji = parsed_emoji
+
         emoji_name: str = getattr(emoji, "name", str(emoji))
 
         guild_size, time_limit, voter_limit = Karma._get_karma_vote_config(ctx.guild)
@@ -372,18 +372,16 @@ class Karma(commands.Cog):
             DiscordEmoji.add(ctx.guild.id, emoji.id, value)
             emoji_name = emoji.name
         elif emoji.isdigit():
-            emoji = self._try_emoji_parse(emoji)
+            parsed_emoji = self._try_emoji_parse(emoji)
 
-            if emoji is None:
+            if parsed_emoji is None:
                 await ctx.reply(
-                    _(ctx, "Emoji with ID {emoji_id} not found!").format(
-                        emoji_id=emoji_id
-                    )
+                    _(ctx, "Emoji with ID {emoji_id} not found!").format(emoji_id=emoji)
                 )
                 return
 
-            DiscordEmoji.add(ctx.guild.id, emoji.id, value)
-            emoji_name = emoji.name
+            DiscordEmoji.add(ctx.guild.id, parsed_emoji.id, value)
+            emoji_name = parsed_emoji.name
         else:
             UnicodeEmoji.add(ctx.guild.id, emoji, value)
             emoji_name = emoji
