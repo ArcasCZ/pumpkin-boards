@@ -371,6 +371,7 @@ class Karma(commands.Cog):
                 emoji=str(emoji), value=result
             )
         )
+
     @commands.check(check.acl)
     @karma_.command(name="unset")
     async def karma_unset(self, ctx, emoji: Union[discord.PartialEmoji, str]):
@@ -425,8 +426,6 @@ class Karma(commands.Cog):
             ctx.author, ctx.channel, f"Karma value of '{emoji_name}' set to {value}."
         )
         await ctx.reply(_(ctx, "The value has been set."))
-
-
 
     @commands.check(check.acl)
     @karma_.command(name="message")
